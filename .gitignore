@@ -1,3 +1,7 @@
+#crashlytics
+app/src/main/assets/crashlytics-build.properties
+app/src/main/res/values/com_crashlytics_export_strings.xml
+
 #built application files
 *.apk
 *.ap_

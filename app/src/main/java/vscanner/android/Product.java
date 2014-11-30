@@ -1,13 +1,14 @@
 package vscanner.android;
 
-public final class Product {
+import java.io.Serializable;
+
+public final class Product implements Serializable {
+    public static enum Status { NOT_VEGETARIAN, VEGETARIAN, VEGAN }
     private final String barcode;
     private final String name;
     private final String company;
-    private final boolean isVegan;
-    private final boolean isVegetarian;
+    private final Status status;
     private final boolean wasTestedOnAnimals;
-    private final String comment;
     private final boolean isFullyInitialized;
 
     /**
@@ -21,38 +22,34 @@ public final class Product {
         this.barcode = barcode;
         this.name = "";
         this.company = "";
-        this.isVegan = false;
-        this.isVegetarian = false;
+        this.status = Status.NOT_VEGETARIAN;
         this.wasTestedOnAnimals = true;
-        this.comment = "";
         this.isFullyInitialized = false;
     }
 
     /**
      * @param barcode must be valid (BarcodeToolkit.isValid(..) == true).
-     * @throws java.lang.IllegalArgumentException if barcode is not valid.
+     * @param status must be not null
+     * @throws java.lang.IllegalArgumentException if any parameter is invalid.
      */
     public Product(
             final String barcode,
             final String name,
             final String company,
-            final boolean isVegan,
-            final boolean isVegetarian,
-            final boolean wasTestedOnAnimals,
-            final String comment) throws IllegalArgumentException  {
+            final Status status,
+            final boolean wasTestedOnAnimals) throws IllegalArgumentException  {
         if (!BarcodeToolkit.isValid(barcode)) {
             throw new IllegalArgumentException("barcode is not valid");
+        } else if (status == null) {
+            throw new IllegalArgumentException("status is null");
         }
         App.assertCondition(name != null);
         App.assertCondition(company != null);
-        App.assertCondition(comment != null);
         this.barcode = barcode;
         this.name = name;
         this.company = company;
-        this.isVegan = isVegan;
-        this.isVegetarian = isVegetarian;
+        this.status = status;
         this.wasTestedOnAnimals = wasTestedOnAnimals;
-        this.comment = comment;
         this.isFullyInitialized = true;
     }
 
@@ -69,19 +66,22 @@ public final class Product {
     }
 
     public boolean isVegan() {
-        return isVegan;
+        return status == Status.VEGAN;
     }
 
     public boolean isVegetarian() {
-        return isVegetarian;
+        return status == Status.VEGAN || status == Status.VEGETARIAN;
+    }
+
+    /**
+     * @return not null.
+     */
+    public Status getStatus() {
+        return status;
     }
 
     public boolean wasTestedOnAnimals() {
         return wasTestedOnAnimals;
-    }
-
-    public String getComment() {
-        return comment;
     }
 
     /**

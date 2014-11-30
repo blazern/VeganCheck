@@ -21,10 +21,10 @@ android {
 
     defaultConfig {
         applicationId "vscanner.android"
-        minSdkVersion 8
+        minSdkVersion 9
         targetSdkVersion 20
-        versionCode 1
-        versionName "0.1"
+        versionCode 4
+        versionName "0.13debug"
     }
     buildTypes {
         release {
