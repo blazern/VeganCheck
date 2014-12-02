@@ -23,7 +23,6 @@ final class ActivityNewScanState extends ScanActivityState {
     }
 
     private void tryStartScanning() {
-        // TODO: God knows what would happen if the XZing is not installed.
         if (App.isOnline()) {
             final IntentIntegrator scanIntegrator = new IntentIntegrator(getActivity());
             final AlertDialog installScannerAppTip = scanIntegrator.initiateScan();
@@ -31,6 +30,11 @@ final class ActivityNewScanState extends ScanActivityState {
                 getActivity().showToastWith(R.string.scan_activity_before_scan_start_message);
             } else {
                 // XZing is not installed
+                App.error(
+                        this,
+                        ActivityNewScanState.class.getCanonicalName()
+                                + ": a scanning app is not found! Something went wrong!");
+                getActivity().finish();
             }
         } else {
             requestAsyncStateChangeTo(new ActivityBeforeScanState(this));

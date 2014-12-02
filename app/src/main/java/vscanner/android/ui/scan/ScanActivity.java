@@ -1,11 +1,13 @@
 package vscanner.android.ui.scan;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;

@@ -244,6 +244,23 @@ public class IntentIntegrator {
     }
 
     /**
+     * <b>WAS CREATED BY AN VSCANNER DEVELOPER, NOT AN ORIGINAL METHOD</b><br>
+     * Shows a dialog with an offer to install a scan app, if no app is found
+     * @return the shown dialog or null
+     */
+    public final AlertDialog showDialogIfNoApp(final DialogInterface.OnClickListener onNegativeButtonClickListener) {
+        Intent intentScan = new Intent(BS_PACKAGE + ".SCAN");
+        intentScan.addCategory(Intent.CATEGORY_DEFAULT);
+
+        String targetAppPackage = findTargetAppPackage(intentScan);
+        if (targetAppPackage == null) {
+            return showDownloadDialog(onNegativeButtonClickListener);
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Initiates a scan for all known barcode types with the specified camera.
      *
      * @param cameraId camera ID of the camera to use. A negative value means "no preference".
@@ -301,7 +318,7 @@ public class IntentIntegrator {
 
         String targetAppPackage = findTargetAppPackage(intentScan);
         if (targetAppPackage == null) {
-            return showDownloadDialog();
+            return showDownloadDialog(null);
         }
         intentScan.setPackage(targetAppPackage);
         intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -351,7 +368,7 @@ public class IntentIntegrator {
         return false;
     }
 
-    private AlertDialog showDownloadDialog() {
+    private AlertDialog showDownloadDialog(final DialogInterface.OnClickListener onNegativeButtonClickListener) {
         AlertDialog.Builder downloadDialog = new AlertDialog.Builder(activity);
         downloadDialog.setTitle(title);
         downloadDialog.setMessage(message);
@@ -378,10 +395,11 @@ public class IntentIntegrator {
                     // Hmm, market is not installed
                     Log.w(TAG, "Google Play is not installed; cannot install " + packageName);
                 }
+                activity.finish();
             }
         });
-        downloadDialog.setNegativeButton(buttonNo, null);
-        downloadDialog.setCancelable(true);
+        downloadDialog.setNegativeButton(buttonNo, onNegativeButtonClickListener);
+        downloadDialog.setCancelable(false);
         return downloadDialog.show();
     }
 
@@ -447,7 +465,7 @@ public class IntentIntegrator {
         intent.putExtra("ENCODE_DATA", text);
         String targetAppPackage = findTargetAppPackage(intent);
         if (targetAppPackage == null) {
-            return showDownloadDialog();
+            return showDownloadDialog(null);
         }
         intent.setPackage(targetAppPackage);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
