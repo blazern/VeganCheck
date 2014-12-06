@@ -16,7 +16,7 @@ import vscanner.android.ui.BarcodeHttpActionFragment;
 public class ReportActivity extends BarcodeHttpActionActivity {
     public ReportActivity() {
         super(
-                "http://lumeria.ru/vscaner/er.php",
+                App.getConfig().getServerUrl() + "er.php",
                 R.string.report_activity_submit_request_sent_toast,
                 R.string.report_activity_on_request_successfully_delivered,
                 R.string.report_activity_title);

@@ -106,4 +106,8 @@ public class App extends Application {
     public static MyActivityBase getFrontActivity() {
         return impl.getFrontActivity();
     }
+
+    public static Config getConfig() {
+        return impl.getConfig();
+    }
 }

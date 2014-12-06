@@ -17,7 +17,6 @@ class DefaultAppImpl extends AppImpl {
     private boolean scanBarcodeAppInstalled;
 
     DefaultAppImpl(final Application application) {
-        super();
         this.context = application;
         com.google.zxing.integration.android.IntentIntegrator.titleStringId =
                 R.string.barcode_app_install_request_title;

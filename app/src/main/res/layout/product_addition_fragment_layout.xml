@@ -17,7 +17,6 @@
             android:layout_marginRight="@dimen/activity_content_horizontal_margin"
             android:background="@drawable/text_cloud"
             android:hint="@string/product_addition_fragment_company_name_hint"
-            android:maxLines="1"
             android:padding="20dp"/>
 
         <EditText
@@ -29,7 +28,6 @@
             android:layout_marginRight="@dimen/activity_content_horizontal_margin"
             android:background="@drawable/text_cloud"
             android:hint="@string/product_addition_fragment_product_name_hint"
-            android:maxLines="1"
             android:padding="20dp"/>
 
         <LinearLayout

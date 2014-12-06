@@ -27,7 +27,7 @@ import vscanner.android.ui.scan.ScanActivity;
 public class ProductAdditionActivity extends BarcodeHttpActionActivity {
     public ProductAdditionActivity() {
         super(
-                "http://lumeria.ru/vscaner/tobase.php",
+                App.getConfig().getServerUrl() + "tobase.php",
                 R.string.product_addition_activity_submit_request_sent_toast,
                 R.string.product_addition_activity_on_request_successfully_delivered,
                 R.string.product_addition_activity_title);
@@ -56,7 +56,7 @@ public class ProductAdditionActivity extends BarcodeHttpActionActivity {
             postParameters.add(
                     new ParcelableNameValuePair(
                             "animals",
-                            String.valueOf(product.wasTestedOnAnimals())));
+                            product.wasTestedOnAnimals() ? "1" : "0"));
             postParameters.add(new ParcelableNameValuePair("comment", "")); // TODO: empty comment? Maybe not pass it at all?
         } else {
             App.error(this, "(actionResult instanceof Product) == false!");
@@ -78,10 +78,10 @@ public class ProductAdditionActivity extends BarcodeHttpActionActivity {
         // (Like that: isNotVegan instead of isVegan.)
         inversedPostParameters.add(new ParcelableNameValuePair(
                 "veganstatus",
-                String.valueOf(!product.isVegan())));
+                product.isVegan() ? "0" : "1"));
         inversedPostParameters.add(new ParcelableNameValuePair(
                 "vegetstatus",
-                String.valueOf(!product.isVegetarian())));
+                product.isVegetarian() ? "0" : "1"));
 
         return inversedPostParameters;
     }

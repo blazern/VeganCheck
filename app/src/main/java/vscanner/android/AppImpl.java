@@ -1,6 +1,7 @@
 package vscanner.android;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -12,6 +13,8 @@ import java.util.Arrays;
 import vscanner.android.ui.MyActivityBase;
 
 public abstract class AppImpl {
+    private Config config;
+
     protected AppImpl() {
     }
 
@@ -100,5 +103,12 @@ public abstract class AppImpl {
 
     public MyActivityBase getFrontActivity() {
         return null;
+    }
+
+    public Config getConfig() {
+        if (config == null) {
+            config = new Config(getContext().getResources());
+        }
+        return config;
     }
 }

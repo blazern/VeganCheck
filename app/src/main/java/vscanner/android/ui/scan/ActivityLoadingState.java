@@ -22,7 +22,7 @@ import vscanner.android.ui.CardboardActivityBase;
 
 // TODO: this state should has some timeout - this would protect us from infinite progress bar
 class ActivityLoadingState extends ScanActivityState {
-    private static final String REQUEST_URL = "http://lumeria.ru/vscaner/index.php";
+    private static final String REQUEST_URL = App.getConfig().getServerUrl() + "index.php";
     private static final String KEYS_START = ActivityLoadingState.class.getCanonicalName() + ".";
     private static final String REQUEST_ID = KEYS_START + "PRODUCT_REQUEST";
     private static final String BARCODE_EXTRA = KEYS_START + "BARCODE_EXTRA";
