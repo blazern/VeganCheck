@@ -14,7 +14,6 @@ import android.widget.RelativeLayout;
 import vscanner.android.App;
 import vscanner.android.R;
 
-// TODO: create getMiddleFragment, .. methods - they're needed for blinkless states changing in ScanActivity
 public abstract class CardboardActivityBase extends MyActivityBase {
     private static final String EXTRA_PROGRESS_FOREGROUND_VISIBILITY =
             CardboardActivityBase.class.getCanonicalName() + ".EXTRA_PROGRESS_FOREGROUND_VISIBILITY";

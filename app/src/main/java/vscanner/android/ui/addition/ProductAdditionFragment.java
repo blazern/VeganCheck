@@ -1,7 +1,6 @@
 package vscanner.android.ui.addition;
 
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,30 +140,51 @@ public class ProductAdditionFragment extends BarcodeHttpActionFragment<Product> 
         final View.OnClickListener cowClickListener = new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
+                final View root = getView();
+                if (root == null) {
+                    return;
+                }
+
+                final CheckBox wasTestedOnAnimalsCheckbox =
+                        (CheckBox) root.findViewById(R.id.checkbox_was_tested_on_animals);
+
                 switch (view.getId()) {
                     case R.id.layout_not_vegetarian:
                         checkedCow = CheckedCow.NOT_VEGETARIAN;
                         break;
                     case R.id.layout_vegetarian:
                         checkedCow = CheckedCow.VEGETARIAN;
+                        wasTestedOnAnimalsCheckbox.setChecked(false);
                         break;
                     case R.id.layout_vegan:
                         checkedCow = CheckedCow.VEGAN;
+                        wasTestedOnAnimalsCheckbox.setChecked(false);
                         break;
                     default:
-                        App.assertCondition(false, "some cow mood layout is not handled");
+                        App.error(this, "some cow mood layout is not handled");
                 }
-                UpdateCheckedCowViewBy(getView());
+                UpdateCowViewsBy(getView());
             }
         };
-
         root.findViewById(R.id.layout_not_vegetarian).setOnClickListener(cowClickListener);
         root.findViewById(R.id.layout_vegetarian).setOnClickListener(cowClickListener);
         root.findViewById(R.id.layout_vegan).setOnClickListener(cowClickListener);
+
+        root.findViewById(R.id.checkbox_was_tested_on_animals).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View view) {
+                        if (((CheckBox) view).isChecked()) {
+                            checkedCow = CheckedCow.NOT_VEGETARIAN;
+                        }
+                        UpdateCowViewsBy(getView());
+                    }
+                }
+        );
         return root;
     }
 
-    private void UpdateCheckedCowViewBy(final View root) {
+    private void UpdateCowViewsBy(final View root) {
         if (root != null) {
             final View notVegetarianCowImage = root.findViewById(R.id.imageview_not_vegetarian);
             final View vegetarianCowImage = root.findViewById(R.id.imageview_vegetarian);
@@ -211,7 +231,7 @@ public class ProductAdditionFragment extends BarcodeHttpActionFragment<Product> 
 
             ((TextView) root.findViewById(R.id.textedit_company_name)).setText(companyName);
             ((TextView) root.findViewById(R.id.textedit_product_name)).setText(productName);
-            UpdateCheckedCowViewBy(root);
+            UpdateCowViewsBy(root);
             ((CheckBox) root.findViewById(R.id.checkbox_was_tested_on_animals)).setChecked(wasTestedOnAnimals);
         } else {
             App.error("can't restore state without root or saved state");

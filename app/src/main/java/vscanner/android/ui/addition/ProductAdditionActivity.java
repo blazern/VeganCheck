@@ -57,7 +57,7 @@ public class ProductAdditionActivity extends BarcodeHttpActionActivity {
                     new ParcelableNameValuePair(
                             "animals",
                             product.wasTestedOnAnimals() ? "1" : "0"));
-            postParameters.add(new ParcelableNameValuePair("comment", "")); // TODO: empty comment? Maybe not pass it at all?
+            postParameters.add(new ParcelableNameValuePair("comment", ""));
         } else {
             App.error(this, "(actionResult instanceof Product) == false!");
         }

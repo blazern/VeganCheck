@@ -2,9 +2,13 @@ package vscanner.android.ui.report;
 
 import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import vscanner.android.App;
 import vscanner.android.BarcodeToolkit;
@@ -16,7 +20,7 @@ import vscanner.android.ui.BarcodeHttpActionFragment;
 public class ReportActivity extends BarcodeHttpActionActivity {
     public ReportActivity() {
         super(
-                App.getConfig().getServerUrl() + "er.php",
+                App.getConfig().getServerUrl() + "addcomment.php",
                 R.string.report_activity_submit_request_sent_toast,
                 R.string.report_activity_on_request_successfully_delivered,
                 R.string.report_activity_title);
@@ -29,7 +33,13 @@ public class ReportActivity extends BarcodeHttpActionActivity {
         if (actionResult instanceof String) {
             final String reportText = (String) actionResult;
 
+            final String androidId =
+                    Settings.Secure.getString(
+                            getContentResolver(),
+                            Settings.Secure.ANDROID_ID);
+
             postParameters.add(new ParcelableNameValuePair("bcod", getBarcode()));
+            postParameters.add(new ParcelableNameValuePair("name", androidId));
             postParameters.add(new ParcelableNameValuePair("comment", reportText));
         } else {
             App.error(this, "(actionResult instanceof String) == false!");

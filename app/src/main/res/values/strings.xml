@@ -18,8 +18,6 @@
 
     <string name="product_description_fragment_product_name_title">Наименование:</string>
     <string name="product_description_fragment_company_title">Производитель:</string>
-    <string name="product_description_fragment_not_tested_on_animals_title">Не тестировался на животных</string>
-    <string name="product_description_fragment_tested_on_animals_title">Тестировался на животных</string>
     <string name="product_description_fragment_product_info_title">Информация о продукте</string>
 
     <string name="scan_activity_product_downloading_error_message">Ой, ошибка

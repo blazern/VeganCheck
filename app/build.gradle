@@ -23,12 +23,12 @@ android {
         applicationId "vscanner.android"
         minSdkVersion 9
         targetSdkVersion 20
-        versionCode 7
-        versionName "0.16"
+        versionCode 8
+        versionName "0.1.17"
     }
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

@@ -2,7 +2,7 @@
 
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentTop="true">
     <LinearLayout
@@ -68,30 +68,5 @@
                 </TableRow>
             </TableLayout>
         </LinearLayout>
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:background="@drawable/text_cloud"
-            android:stretchColumns="0, 1">
-            <TableRow
-                android:layout_marginBottom="15dip"
-                android:layout_marginTop="15dp"
-                android:orientation="vertical">
-                <ImageView
-                    android:id="@+id/imageview_tests_on_animals"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:contentDescription="@null"
-                    android:gravity="right"
-                    android:paddingRight="6dp"
-                    android:src="@drawable/tested_on_animals_false"/>
-                <TextView
-                    android:id="@+id/text_tests_on_animals"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/product_description_fragment_not_tested_on_animals_title"/>
-            </TableRow>
-        </TableLayout>
     </LinearLayout>
 </ScrollView>

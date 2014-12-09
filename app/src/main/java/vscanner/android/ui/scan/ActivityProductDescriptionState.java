@@ -62,12 +62,12 @@ class ActivityProductDescriptionState extends ScanActivityState {
 
         final CowSaysFragment cowSaysFragment = new CowSaysFragment();
 
-        if (product.isVegan()) {
+        if (product.isVegan() && !product.wasTestedOnAnimals()) {
             cowSaysFragment.setCowsText(
                     getActivity().getString(
                             R.string.scan_activity_product_status_vegan));
             cowSaysFragment.setCowMood(CowState.Mood.GOOD);
-        } else if (product.isVegetarian()) {
+        } else if (product.isVegetarian() && !product.wasTestedOnAnimals()) {
             cowSaysFragment.setCowsText(
                     getActivity().getString(
                             R.string.scan_activity_product_status_vegetarian));

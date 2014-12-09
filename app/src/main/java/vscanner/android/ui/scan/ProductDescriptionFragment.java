@@ -52,16 +52,6 @@ public class ProductDescriptionFragment extends Fragment {
                     setText(product.getName());
             ((TextView) root.findViewById(R.id.text_company_name)).
                     setText(product.getCompany());
-
-            final ImageView animalTestsImage = (ImageView) root.findViewById(R.id.imageview_tests_on_animals);
-            final TextView animalsTestsText = (TextView) root.findViewById(R.id.text_tests_on_animals);
-            if (product.wasTestedOnAnimals()) {
-                animalTestsImage.setImageResource(R.drawable.tested_on_animals_true);
-                animalsTestsText.setText(R.string.product_description_fragment_tested_on_animals_title);
-            } else {
-                animalTestsImage.setImageResource(R.drawable.tested_on_animals_false);
-                animalsTestsText.setText(R.string.product_description_fragment_not_tested_on_animals_title);
-            }
         } else {
             App.error(this, "product is null, invalid data will be shown");
             ((TextView) root.findViewById(R.id.text_barcode)).setText(R.string.raw_internal_error);
