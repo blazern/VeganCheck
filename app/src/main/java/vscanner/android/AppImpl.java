@@ -111,4 +111,8 @@ public abstract class AppImpl {
         }
         return config;
     }
+
+    public abstract String getDeviceID();
+
+    public abstract String getAppVersion();
 }

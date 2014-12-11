@@ -38,6 +38,16 @@ public class TestScanActivity extends ActivityInstrumentationTestCase2<ScanActiv
                     public MyActivityBase getFrontActivity() {
                         return activity;
                     }
+
+                    @Override
+                    public String getDeviceID() {
+                        return "UNIT TESTS DEVICE";
+                    }
+
+                    @Override
+                    public String getAppVersion() {
+                        return "UNIT TESTS APP VERSION";
+                    }
                 };
             }
         });

@@ -33,13 +33,8 @@ public class ReportActivity extends BarcodeHttpActionActivity {
         if (actionResult instanceof String) {
             final String reportText = (String) actionResult;
 
-            final String androidId =
-                    Settings.Secure.getString(
-                            getContentResolver(),
-                            Settings.Secure.ANDROID_ID);
-
             postParameters.add(new ParcelableNameValuePair("bcod", getBarcode()));
-            postParameters.add(new ParcelableNameValuePair("name", androidId));
+            postParameters.add(new ParcelableNameValuePair("name", App.getDeviceID()));
             postParameters.add(new ParcelableNameValuePair("comment", reportText));
         } else {
             App.error(this, "(actionResult instanceof String) == false!");

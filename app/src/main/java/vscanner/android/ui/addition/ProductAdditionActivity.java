@@ -27,7 +27,7 @@ import vscanner.android.ui.scan.ScanActivity;
 public class ProductAdditionActivity extends BarcodeHttpActionActivity {
     public ProductAdditionActivity() {
         super(
-                App.getConfig().getServerUrl() + "tobase.php",
+                App.getConfig().getServerUrl() + "tobasenew.php",
                 R.string.product_addition_activity_submit_request_sent_toast,
                 R.string.product_addition_activity_on_request_successfully_delivered,
                 R.string.product_addition_activity_title);
@@ -50,14 +50,28 @@ public class ProductAdditionActivity extends BarcodeHttpActionActivity {
             postParameters.add(new ParcelableNameValuePair("name", product.getName()));
             postParameters.add(new ParcelableNameValuePair("companyname", product.getCompany()));
 
-            postParameters.addAll(getLogicalInversedParametersFor(product));
+            // NOTE: Logical inversion with the 2 below parameters is intentional,
+            // because server mistakenly uses negative naming convention for these 2.
+            // (Like that: isNotVegan instead of isVegan.)
+            postParameters.add(new ParcelableNameValuePair(
+                    "veganstatus",
+                    product.isVegan() ? "0" : "1"));
+            postParameters.add(new ParcelableNameValuePair(
+                    "vegetstatus",
+                    product.isVegetarian() ? "0" : "1"));
+            ////
 
             postParameters.add(new ParcelableNameValuePair("gmo", "0"));
             postParameters.add(
-                    new ParcelableNameValuePair(
-                            "animals",
-                            product.wasTestedOnAnimals() ? "1" : "0"));
+                    new ParcelableNameValuePair("animals", product.wasTestedOnAnimals() ? "1" : "0"));
             postParameters.add(new ParcelableNameValuePair("comment", ""));
+
+            postParameters.add(
+                    new ParcelableNameValuePair("user_client_app_identificator", App.getDeviceID()));
+            postParameters.add(
+                    new ParcelableNameValuePair("user_client_platform_type_index", "1"));
+            postParameters.add(
+                    new ParcelableNameValuePair("user_client_app_version", App.getAppVersion()));
         } else {
             App.error(this, "(actionResult instanceof Product) == false!");
         }
@@ -68,22 +82,6 @@ public class ProductAdditionActivity extends BarcodeHttpActionActivity {
     @Override
     protected BarcodeHttpActionFragment createFragment() {
         return ProductAdditionFragment.createFor(getBarcode());
-    }
-
-    private List<ParcelableNameValuePair> getLogicalInversedParametersFor(final Product product) {
-        final List<ParcelableNameValuePair> inversedPostParameters = new ArrayList<ParcelableNameValuePair>();
-
-        // NOTE: Logical inversion with the 2 below parameters is intentional,
-        // because server mistakenly uses negative naming convention for these 2.
-        // (Like that: isNotVegan instead of isVegan.)
-        inversedPostParameters.add(new ParcelableNameValuePair(
-                "veganstatus",
-                product.isVegan() ? "0" : "1"));
-        inversedPostParameters.add(new ParcelableNameValuePair(
-                "vegetstatus",
-                product.isVegetarian() ? "0" : "1"));
-
-        return inversedPostParameters;
     }
 
     /**

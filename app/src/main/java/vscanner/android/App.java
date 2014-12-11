@@ -107,6 +107,14 @@ public class App extends Application {
         return impl.getFrontActivity();
     }
 
+    public static String getDeviceID() {
+        return impl.getDeviceID();
+    }
+
+    public static String getAppVersion() {
+        return impl.getAppVersion();
+    }
+
     public static Config getConfig() {
         return impl.getConfig();
     }
