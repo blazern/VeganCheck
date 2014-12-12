@@ -4,7 +4,7 @@
     <!--Context independent strings start with 'raw'.-->
     <!--This naming convention is supposed to show which string might be used by different context
     without a fear that someone would change its (string's) content somewhen.-->
-    <string name="app_name">Vegan Check</string>
+    <string name="app_name" translatable="false">Vegan Check</string>
 
     <string name="barcode_app_install_request_title">Распознание штрих-кодов</string>
     <string name="barcode_app_install_request_message">Для корректной работы нашего
