@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="vscanner.android">
+    package="vegancheck.android">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name="vscanner.android.App"
+        android:name="vegancheck.android.App"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -21,11 +21,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="vscanner.android.ui.addition.ProductAdditionActivity"
+            android:name="vegancheck.android.ui.addition.ProductAdditionActivity"
             android:label="@string/app_name" />
-        <service android:name="vscanner.android.network.http.HttpService" />
+        <service android:name="vegancheck.android.network.http.HttpService" />
         <activity
-            android:name="vscanner.android.ui.report.ReportActivity"
+            android:name="vegancheck.android.ui.report.ReportActivity"
             android:label="@string/app_name" />
         <meta-data
             android:name="com.crashlytics.ApiKey"

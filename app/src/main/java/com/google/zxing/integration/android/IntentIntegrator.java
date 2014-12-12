@@ -244,7 +244,7 @@ public class IntentIntegrator {
     }
 
     /**
-     * <b>WAS CREATED BY AN VSCANNER DEVELOPER, NOT AN ORIGINAL METHOD</b><br>
+     * <b>WAS CREATED BY AN VEGANCHECK DEVELOPER, NOT AN ORIGINAL METHOD</b><br>
      * Shows a dialog with an offer to install a scan app, if no app is found
      * @return the shown dialog or null
      */

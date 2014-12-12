@@ -20,7 +20,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "vscanner.android"
+        applicationId "vegancheck.android"
         minSdkVersion 9
         targetSdkVersion 20
         versionCode 9
