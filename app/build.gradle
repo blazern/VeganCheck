@@ -23,8 +23,8 @@ android {
         applicationId "vegancheck.android"
         minSdkVersion 9
         targetSdkVersion 20
-        versionCode 10
-        versionName "0.1.19"
+        versionCode 14
+        versionName "0.1.23"
     }
     buildTypes {
         release {
