@@ -89,18 +89,12 @@ public abstract class BarcodeHttpActionActivity extends CardboardActivityBase {
         }
     }
 
-    /**
-     * @param actionUrl must be a valid url, i.e. (URLUtil.isValidUrl(url) == true)
-     * @throws java.lang.IllegalArgumentException if actionUrl is invalid
-     */
     protected BarcodeHttpActionActivity(
             final String actionUrl,
             final int requestSentToastStringId,
             final int requestSuccessfullyDeliveredStringId,
             final int titleStringId) {
-        if (!URLUtil.isValidUrl(actionUrl)) {
-            throw new IllegalArgumentException("url must be valid");
-        }
+        App.assertCondition(URLUtil.isValidUrl(actionUrl));
         this.actionUrl = actionUrl;
         this.requestSentToastStringId = requestSentToastStringId;
         this.requestSuccessfullyDeliveredStringId = requestSuccessfullyDeliveredStringId;

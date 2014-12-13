@@ -27,17 +27,14 @@ public final class Http {
     }
 
     /**
-     * @param url must be a valid url, ie (URLUtil.isValidUrl(url) == true)
      * @return server's reply, not null
      * @throws IOException if something went wrong during querying.
-     * @throws IllegalArgumentException if any argument is not valid
      */
     public static String post(
             final String url,
             final List<? extends NameValuePair> postParameters) throws IllegalArgumentException, IOException {
-        if (!URLUtil.isValidUrl(url)) {
-            throw new IllegalArgumentException("given url (" + url + ") is not valid");
-        }
+        App.assertCondition(!URLUtil.isValidUrl(url));
+
         final List<NameValuePair> validPostParameters = validate(postParameters);
 
         final org.apache.http.client.methods.HttpPost request =
