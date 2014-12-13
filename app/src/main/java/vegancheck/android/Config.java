@@ -12,10 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 
-// TODO: do something about that:
-// It's really dangerous to call methods of App from body of this class since its instances
-// are created by App itself - it's possible that at some point in the future this class would call
-// method of not yet initialized App
 public final class Config {
     private static final String CONFIG_FILE_NAME = "config.json";
     private static final String DEFAULT_URL = "http://lumeria.ru/vscaner/";

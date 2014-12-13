@@ -94,7 +94,7 @@ public abstract class BarcodeHttpActionActivity extends CardboardActivityBase {
             final int requestSentToastStringId,
             final int requestSuccessfullyDeliveredStringId,
             final int titleStringId) {
-        App.assertCondition(URLUtil.isValidUrl(actionUrl));
+        App.assertCondition(URLUtil.isValidUrl(actionUrl), "url is not valid");
         this.actionUrl = actionUrl;
         this.requestSentToastStringId = requestSentToastStringId;
         this.requestSuccessfullyDeliveredStringId = requestSuccessfullyDeliveredStringId;

@@ -5,9 +5,6 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import junit.framework.Assert;
 
-import vegancheck.android.App;
-import vegancheck.android.AppImpl;
-import vegancheck.android.ui.MyActivityBase;
 import vegancheck.android.ui.scan.ScanActivity;
 import vegancheck.android.ui.scan.ScanActivityState;
 
@@ -17,38 +14,6 @@ public class TestScanActivity extends ActivityInstrumentationTestCase2<ScanActiv
             @Override
             public ScanActivityState createFor(final ScanActivity activity) {
                 return new StateStayingLast(activity);
-            }
-        });
-        App.setImplCreator(new App.ImplCreator() {
-            @Override
-            public AppImpl create() {
-                return new AppImpl() {
-                    private MyActivityBase activity;
-
-                    public void onActivityPause(final MyActivityBase activity) {
-                        this.activity = null;
-                    }
-
-                    @Override
-                    public void onActivityResumeFragments(final MyActivityBase activity) {
-                        this.activity = activity;
-                    }
-
-                    @Override
-                    public MyActivityBase getFrontActivity() {
-                        return activity;
-                    }
-
-                    @Override
-                    public String getDeviceID() {
-                        return "UNIT TESTS DEVICE";
-                    }
-
-                    @Override
-                    public String getAppVersion() {
-                        return "UNIT TESTS APP VERSION";
-                    }
-                };
             }
         });
     }

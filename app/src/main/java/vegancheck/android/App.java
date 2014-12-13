@@ -1,99 +1,150 @@
 package vegancheck.android;
 
+import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.provider.Settings;
+import android.util.Log;
+
+import com.crashlytics.android.Crashlytics;
+import com.google.zxing.integration.android.IntentIntegrator;
+
+import java.util.Arrays;
 
 import vegancheck.android.ui.MyActivityBase;
 
 public class App extends Application {
-    public static interface ImplCreator {
-        AppImpl create();
-    }
-
-    private static final class DefaultImplCreator implements ImplCreator {
-        @Override
-        public AppImpl create() {
-            return new DefaultAppImpl(applicationInstance);
-        }
-    }
-
     private static Application applicationInstance;
-    private static ImplCreator implCreator = new DefaultImplCreator();
-    private static AppImpl impl;
-
-    public static void setImplCreator(final ImplCreator implCreator) {
-        if (implCreator != null) {
-            App.implCreator = implCreator;
-        }
-    }
+    private static Config config;
+    private static MyActivityBase currentActivity;
+    private static boolean scanBarcodeAppInstalled;
 
     @Override
     public void onCreate() {
         applicationInstance = this;
-        impl = implCreator.create();
-        if (impl == null) {
-            throw new Error("wtf, implCreator created null!");
-        }
+        com.google.zxing.integration.android.IntentIntegrator.titleStringId =
+                R.string.barcode_app_install_request_title;
+        com.google.zxing.integration.android.IntentIntegrator.messageStringId =
+                R.string.barcode_app_install_request_message;
+        com.google.zxing.integration.android.IntentIntegrator.yesStringId =
+                R.string.barcode_app_install_request_reply_yes;
+        com.google.zxing.integration.android.IntentIntegrator.noStringId =
+                R.string.barcode_app_install_request_reply_no;
+        config = new Config(getContext().getResources());
     }
 
     public static Context getContext() {
-        return impl.getContext();
+        return applicationInstance;
     }
 
     public static String getStringWith(final int stringId) {
-        return impl.getStringWith(stringId);
+        return applicationInstance.getString(stringId);
     }
 
     public static String getName() {
-        return impl.getName();
+        return applicationInstance.getString(R.string.app_name);
     }
 
     public static void logError(final Object requester, final String message) {
-        impl.logError(requester, message);
+        Log.e(getName(), requester.getClass().toString() + ": " + message);
     }
 
     public static void logDebug(final Object requester, final String message) {
-        impl.logDebug(requester, message);
+        Log.d(getName(), requester.getClass().toString() + ": " + message);
     }
 
     public static void logInfo(final Object requester, final String message) {
-        impl.logInfo(requester, message);
+        Log.i(getName(), requester.getClass().toString() + ": " + message);
     }
 
     public static void logInfo(final Object requester, final String message, final Exception e) {
-        impl.logInfo(requester, message, e);
+        Log.i(getName(), requester.getClass().toString() + ": " + message, e);
     }
 
     public static void wtf(final Object requester, final String message) {
-        impl.wtf(requester, message);
+        Log.wtf(getName(), requester.getClass().toString() + ": " + message);
     }
 
     public static void assertCondition(final boolean condition) {
-        impl.assertCondition(condition);
+        if (condition == false) {
+            if (BuildConfig.DEBUG) {
+                throw new AssertionError();
+            } else {
+                Crashlytics.log(
+                        "ASSERTATION FAILED!\n"
+                                + Arrays.toString(Thread.currentThread().getStackTrace()));
+            }
+        }
     }
 
     public static void assertCondition(final boolean condition, final String message) {
-        impl.assertCondition(condition, message);
+        if (condition == false) {
+            logError(App.class, message);
+            if (BuildConfig.DEBUG) {
+                throw new AssertionError();
+            } else {
+                Crashlytics.log(
+                        "ASSERTATION FAILED! message: '" + message + "'\n"
+                                + Arrays.toString(Thread.currentThread().getStackTrace()));
+            }
+        }
     }
 
     public static void error(final String message) {
-        impl.error(message);
+        logError(App.class, message);
+        if (BuildConfig.DEBUG) {
+            throw new Error(message);
+        } else {
+            Crashlytics.log(
+                    "ERROR! message: '" + message + "'\n"
+                            + Arrays.toString(Thread.currentThread().getStackTrace()));
+        }
     }
 
     public static void error(final Object requester, final String message) {
-        impl.error(requester, message);
+        logError(requester, message);
+        error(message);
     }
 
     public static boolean isOnline() {
-        return impl.isOnline();
+        final ConnectivityManager connectivityManager =
+                (ConnectivityManager) applicationInstance.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     public static void onActivityPause(final MyActivityBase activity) {
-        impl.onActivityPause(activity);
+        if (currentActivity == activity) {
+            currentActivity = null;
+        }
     }
 
     public static void onActivityResumeFragments(final MyActivityBase activity) {
-        impl.onActivityResumeFragments(activity);
+        final IntentIntegrator scanIntegrator = new IntentIntegrator(activity);
+        if (!scanBarcodeAppInstalled) {
+            try {
+                final AlertDialog installScanBarcodeAppDialog = scanIntegrator.showDialogIfNoApp(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        activity.finish();
+                    }
+                });
+                scanBarcodeAppInstalled = installScanBarcodeAppDialog == null;
+            } catch (final Exception e) {
+                App.logError(
+                        applicationInstance,
+                        "an error occurred after an attempt to show a 'install XZing' dialog");
+                activity.finish();
+            }
+        }
+
+        currentActivity = activity;
     }
 
     /**
@@ -104,18 +155,27 @@ public class App extends Application {
      * @return front activity
      */
     public static MyActivityBase getFrontActivity() {
-        return impl.getFrontActivity();
+        return currentActivity;
     }
 
     public static String getDeviceID() {
-        return impl.getDeviceID();
+        return Settings.Secure.getString(
+                applicationInstance.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
     }
 
     public static String getAppVersion() {
-        return impl.getAppVersion();
+        final PackageManager manager = applicationInstance.getPackageManager();
+        try {
+            final PackageInfo packageInfo = manager.getPackageInfo(applicationInstance.getPackageName(), 0);
+            return packageInfo.versionName;
+        } catch (final PackageManager.NameNotFoundException e) {
+            App.error(applicationInstance, e.getMessage());
+            return "COULD NOT ACQUIRE APP VERSION (" + e.getMessage() + ")";
+        }
     }
 
     public static Config getConfig() {
-        return impl.getConfig();
+        return config;
     }
 }

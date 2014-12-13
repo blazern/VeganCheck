@@ -33,7 +33,7 @@ public final class Http {
     public static String post(
             final String url,
             final List<? extends NameValuePair> postParameters) throws IllegalArgumentException, IOException {
-        App.assertCondition(!URLUtil.isValidUrl(url));
+        App.assertCondition(URLUtil.isValidUrl(url), "url is not valid");
 
         final List<NameValuePair> validPostParameters = validate(postParameters);
 
