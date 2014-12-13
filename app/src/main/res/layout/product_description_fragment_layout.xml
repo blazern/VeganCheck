@@ -28,7 +28,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="30dp"
-                android:stretchColumns="0, 1">
+                android:stretchColumns="0, 1"
+                android:shrinkColumns="1">
                 <TableRow
                     android:layout_marginBottom="5dip"
                     android:layout_marginTop="5dp">
@@ -53,7 +54,8 @@
                         android:text="@string/product_description_fragment_company_title"/>
                     <TextView
                         android:id="@+id/text_company_name"
-                        android:text="Счастливая Коровка"/>
+                        android:text="Счастливая Коровка с Красивой Мордочкой"
+                        android:singleLine="false"/>
                 </TableRow>
                 <TableRow
                     android:layout_marginBottom="2dip"
