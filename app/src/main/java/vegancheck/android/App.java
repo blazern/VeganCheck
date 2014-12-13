@@ -19,6 +19,7 @@ import java.util.Arrays;
 import vegancheck.android.ui.MyActivityBase;
 
 public class App extends Application {
+    private static boolean isDebug = true;
     private static Application applicationInstance;
     private static Config config;
     private static MyActivityBase currentActivity;
@@ -51,28 +52,38 @@ public class App extends Application {
     }
 
     public static void logError(final Object requester, final String message) {
-        Log.e(getName(), requester.getClass().toString() + ": " + message);
+        if (isDebug) {
+            Log.e(getName(), requester.getClass().toString() + ": " + message);
+        }
     }
 
     public static void logDebug(final Object requester, final String message) {
-        Log.d(getName(), requester.getClass().toString() + ": " + message);
+        if (isDebug) {
+            Log.d(getName(), requester.getClass().toString() + ": " + message);
+        }
     }
 
     public static void logInfo(final Object requester, final String message) {
-        Log.i(getName(), requester.getClass().toString() + ": " + message);
+        if (isDebug) {
+            Log.i(getName(), requester.getClass().toString() + ": " + message);
+        }
     }
 
     public static void logInfo(final Object requester, final String message, final Exception e) {
-        Log.i(getName(), requester.getClass().toString() + ": " + message, e);
+        if (isDebug) {
+            Log.i(getName(), requester.getClass().toString() + ": " + message, e);
+        }
     }
 
     public static void wtf(final Object requester, final String message) {
-        Log.wtf(getName(), requester.getClass().toString() + ": " + message);
+        if (isDebug) {
+            Log.wtf(getName(), requester.getClass().toString() + ": " + message);
+        }
     }
 
     public static void assertCondition(final boolean condition) {
         if (condition == false) {
-            if (BuildConfig.DEBUG) {
+            if (isDebug) {
                 throw new AssertionError();
             } else {
                 Crashlytics.log(
@@ -85,7 +96,7 @@ public class App extends Application {
     public static void assertCondition(final boolean condition, final String message) {
         if (condition == false) {
             logError(App.class, message);
-            if (BuildConfig.DEBUG) {
+            if (isDebug) {
                 throw new AssertionError();
             } else {
                 Crashlytics.log(
@@ -97,7 +108,7 @@ public class App extends Application {
 
     public static void error(final String message) {
         logError(App.class, message);
-        if (BuildConfig.DEBUG) {
+        if (isDebug) {
             throw new Error(message);
         } else {
             Crashlytics.log(
