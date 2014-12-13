@@ -94,11 +94,11 @@ public class ProductAdditionFragment extends BarcodeHttpActionFragment<Product> 
                     status = Product.Status.VEGAN;
                     break;
                 case NONE:
-                    App.error("getErrorMessage() return null but status is invalid!");
+                    App.error(this, "getErrorMessage() return null but status is invalid!");
                     status = Product.Status.NOT_VEGETARIAN;
                     break;
                 default:
-                    App.error("CheckedCow's element is not handled");
+                    App.error(this, "CheckedCow's element is not handled");
                     status = Product.Status.NOT_VEGETARIAN;
             }
 
@@ -108,9 +108,11 @@ public class ProductAdditionFragment extends BarcodeHttpActionFragment<Product> 
             try {
                 return new Product(barcode, productName, companyName, status, wasTestedOnAnimals);
             } catch (final IllegalArgumentException e) {
-                App.error("product validation check has passed, bad a product refused to be created\n"
-                        + "exception message:\n"
-                        + e.getMessage());
+                App.error(
+                        this,
+                        "product validation check has passed, bad a product refused to be created\n"
+                                + "exception message:\n"
+                                + e.getMessage());
             }
         }
         return null;
@@ -216,7 +218,7 @@ public class ProductAdditionFragment extends BarcodeHttpActionFragment<Product> 
                     App.assertCondition(false, "some CheckedCow instance is not handled");
             }
         } else {
-            App.error("can't set up correct cow without the root view");
+            App.error(this, "can't set up correct cow without the root view");
         }
     }
 
@@ -234,7 +236,7 @@ public class ProductAdditionFragment extends BarcodeHttpActionFragment<Product> 
             UpdateCowViewsBy(root);
             ((CheckBox) root.findViewById(R.id.checkbox_was_tested_on_animals)).setChecked(wasTestedOnAnimals);
         } else {
-            App.error("can't restore state without root or saved state");
+            App.error(this, "can't restore state without root or saved state");
         }
     }
 

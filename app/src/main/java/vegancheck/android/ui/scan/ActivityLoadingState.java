@@ -133,6 +133,7 @@ class ActivityLoadingState extends ScanActivityState {
             onHttpPostFailed();
             if (resultType != HttpRequestResult.ResultType.NETWORK_ERROR) {
                 App.error(
+                        this,
                         "an element of "
                                 + HttpRequestResult.ResultType.class.getCanonicalName()
                                 + " is not handled");

@@ -16,7 +16,6 @@ import vegancheck.android.BarcodeToolkit;
 import vegancheck.android.R;
 import vegancheck.android.network.ParcelableNameValuePair;
 import vegancheck.android.network.http.HttpRequestResult;
-import vegancheck.android.ui.scan.ScanActivity;
 
 /**
  * Need a String with BARCODE_EXTRA to be provided in a starting intent.
@@ -84,8 +83,9 @@ public abstract class BarcodeHttpActionActivity extends CardboardActivityBase {
             showToastWith(R.string.raw_error_occurred_during_sending_request_to_the_server);
         } else {
             App.error(
+                    this,
                     HttpRequestResult.ResultType.class.getCanonicalName()
-                    + ": some element is not handled");
+                            + ": some element is not handled");
         }
     }
 
@@ -116,12 +116,12 @@ public abstract class BarcodeHttpActionActivity extends CardboardActivityBase {
         if (intent != null) {
             barcode = intent.getStringExtra(BARCODE_EXTRA);
             if (!BarcodeToolkit.isValid(barcode)) {
-                App.error("need a valid barcode");
+                App.error(this, "need a valid barcode");
                 finish();
                 return;
             }
         } else {
-            App.error("need a barcode");
+            App.error(this, "need a barcode");
             finish();
             return;
         }

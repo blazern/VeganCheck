@@ -52,32 +52,73 @@ public class App extends Application {
     }
 
     public static void logError(final Object requester, final String message) {
+        final String fullMessage = getFullMessage(requester, message, null);
         if (isDebug) {
-            Log.e(getName(), requester.getClass().toString() + ": " + message);
+            Log.e(getName(), fullMessage);
+        } else {
+            Crashlytics.log("error: " + fullMessage);
+        }
+    }
+
+    private static String getFullMessage(
+            final Object requester,
+            final String message,
+            final Exception exception) {
+        final String exceptionMessage;
+        if (exception != null) {
+            exceptionMessage = "exception: (" + exception.getMessage() + ")\n";
+        } else {
+            exceptionMessage = "";
+        }
+        return getNameOf(requester) + ": (" + message + "),\n"
+                + exceptionMessage
+                + "stack trace:\n (" + getStackTrace() + ")";
+    }
+
+    private static String getNameOf(final Object object) {
+        if (object instanceof Class) {
+            final Class objectAsClass = (Class) object;
+            return "[object: " + objectAsClass.getCanonicalName() + "]";
+        } else {
+            return "[object: "
+                    + object.toString()
+                    + ", class: "
+                    + object.getClass().getCanonicalName()
+                    + "]";
         }
     }
 
     public static void logDebug(final Object requester, final String message) {
         if (isDebug) {
-            Log.d(getName(), requester.getClass().toString() + ": " + message);
+            final String fullMessage = getFullMessage(requester, message, null);
+            Log.d(getName(), fullMessage);
         }
     }
 
     public static void logInfo(final Object requester, final String message) {
+        final String fullMessage = getFullMessage(requester, message, null);
         if (isDebug) {
-            Log.i(getName(), requester.getClass().toString() + ": " + message);
+            Log.i(getName(), fullMessage);
+        } else {
+            Crashlytics.log("info: " + fullMessage);
         }
     }
 
     public static void logInfo(final Object requester, final String message, final Exception e) {
+        final String fullMessage = getFullMessage(requester, message, e);
         if (isDebug) {
-            Log.i(getName(), requester.getClass().toString() + ": " + message, e);
+            Log.i(getName(), fullMessage, e);
+        } else {
+            Crashlytics.log("info: " + fullMessage );
         }
     }
 
     public static void wtf(final Object requester, final String message) {
+        final String fullMessage = getFullMessage(requester, message, null);
         if (isDebug) {
-            Log.wtf(getName(), requester.getClass().toString() + ": " + message);
+            Log.wtf(getName(), fullMessage);
+        } else {
+            Crashlytics.log("wtf: " + fullMessage);
         }
     }
 
@@ -87,10 +128,13 @@ public class App extends Application {
                 throw new AssertionError();
             } else {
                 Crashlytics.log(
-                        "ASSERTATION FAILED!\n"
-                                + Arrays.toString(Thread.currentThread().getStackTrace()));
+                        "ASSERTATION FAILED! stack trace:\n" + getStackTrace());
             }
         }
+    }
+
+    private static String getStackTrace() {
+        return Arrays.toString(Thread.currentThread().getStackTrace());
     }
 
     public static void assertCondition(final boolean condition, final String message) {
@@ -100,26 +144,19 @@ public class App extends Application {
                 throw new AssertionError();
             } else {
                 Crashlytics.log(
-                        "ASSERTATION FAILED! message: '" + message + "'\n"
-                                + Arrays.toString(Thread.currentThread().getStackTrace()));
+                        "ASSERTATION FAILED! message: '"
+                                + message
+                                + "'\nstack trace:\n"
+                                + getStackTrace());
             }
-        }
-    }
-
-    public static void error(final String message) {
-        logError(App.class, message);
-        if (isDebug) {
-            throw new Error(message);
-        } else {
-            Crashlytics.log(
-                    "ERROR! message: '" + message + "'\n"
-                            + Arrays.toString(Thread.currentThread().getStackTrace()));
         }
     }
 
     public static void error(final Object requester, final String message) {
         logError(requester, message);
-        error(message);
+        if (isDebug) {
+            throw new Error(message);
+        }
     }
 
     public static boolean isOnline() {
