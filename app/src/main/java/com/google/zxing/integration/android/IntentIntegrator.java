@@ -248,13 +248,13 @@ public class IntentIntegrator {
      * Shows a dialog with an offer to install a scan app, if no app is found
      * @return the shown dialog or null
      */
-    public final AlertDialog showDialogIfNoApp(final DialogInterface.OnClickListener onNegativeButtonClickListener) {
+    public final AlertDialog showDialogIfNoApp() {
         Intent intentScan = new Intent(BS_PACKAGE + ".SCAN");
         intentScan.addCategory(Intent.CATEGORY_DEFAULT);
 
         String targetAppPackage = findTargetAppPackage(intentScan);
         if (targetAppPackage == null) {
-            return showDownloadDialog(onNegativeButtonClickListener);
+            return showDownloadDialog();
         } else {
             return null;
         }
@@ -318,7 +318,7 @@ public class IntentIntegrator {
 
         String targetAppPackage = findTargetAppPackage(intentScan);
         if (targetAppPackage == null) {
-            return showDownloadDialog(null);
+            return showDownloadDialog();
         }
         intentScan.setPackage(targetAppPackage);
         intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -368,11 +368,8 @@ public class IntentIntegrator {
         return false;
     }
 
-    private AlertDialog showDownloadDialog(final DialogInterface.OnClickListener onNegativeButtonClickListener) {
-        AlertDialog.Builder downloadDialog = new AlertDialog.Builder(activity);
-        downloadDialog.setTitle(title);
-        downloadDialog.setMessage(message);
-        downloadDialog.setPositiveButton(buttonYes, new DialogInterface.OnClickListener() {
+    private AlertDialog showDownloadDialog() {
+        final DialogInterface.OnClickListener onYesClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String packageName;
@@ -397,10 +394,18 @@ public class IntentIntegrator {
                 }
                 activity.finish();
             }
-        });
-        downloadDialog.setNegativeButton(buttonNo, onNegativeButtonClickListener);
-        downloadDialog.setCancelable(false);
-        return downloadDialog.show();
+        };
+
+        XZingOfferingDialog downloadDialog = new XZingOfferingDialog(
+                activity,
+                title,
+                message,
+                buttonYes,
+                onYesClickListener,
+                buttonNo);
+        downloadDialog.show();
+
+        return downloadDialog;
     }
 
 
@@ -465,7 +470,7 @@ public class IntentIntegrator {
         intent.putExtra("ENCODE_DATA", text);
         String targetAppPackage = findTargetAppPackage(intent);
         if (targetAppPackage == null) {
-            return showDownloadDialog(null);
+            return showDownloadDialog();
         }
         intent.setPackage(targetAppPackage);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

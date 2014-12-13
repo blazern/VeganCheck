@@ -177,12 +177,8 @@ public class App extends Application {
         final IntentIntegrator scanIntegrator = new IntentIntegrator(activity);
         if (!scanBarcodeAppInstalled) {
             try {
-                final AlertDialog installScanBarcodeAppDialog = scanIntegrator.showDialogIfNoApp(new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        activity.finish();
-                    }
-                });
+                final AlertDialog installScanBarcodeAppDialog =
+                        scanIntegrator.showDialogIfNoApp();
                 scanBarcodeAppInstalled = installScanBarcodeAppDialog == null;
             } catch (final Exception e) {
                 App.logError(

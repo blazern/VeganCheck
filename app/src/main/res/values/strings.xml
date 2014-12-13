@@ -8,7 +8,7 @@
 
     <string name="barcode_app_install_request_title">Распознание штрих-кодов</string>
     <string name="barcode_app_install_request_message">Для корректной работы нашего
-        приложения необходим компонент распознования штрих-кода, он абсолютно бесплатный</string>
+        приложения необходим компонент распознования штрих-кода</string>
     <string name="barcode_app_install_request_reply_yes">Установить</string>
     <string name="barcode_app_install_request_reply_no">Отмена</string>
 
