@@ -6,6 +6,7 @@ app/crashlytics.properties
 #built application files
 *.apk
 *.ap_
+app/manifest-merger-release-report.txt
 
 # files for the dex VM
 *.dex
