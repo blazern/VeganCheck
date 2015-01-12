@@ -16,6 +16,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.Arrays;
 
+import vegancheck.android.location.LocationKeeper;
 import vegancheck.android.ui.MyActivityBase;
 
 public class App extends Application {
@@ -23,6 +24,7 @@ public class App extends Application {
     private static Application applicationInstance;
     private static Config config;
     private static MyActivityBase currentActivity;
+    private static LocationKeeper locationKeeper;
     private static boolean scanBarcodeAppInstalled;
 
     @Override
@@ -37,6 +39,7 @@ public class App extends Application {
         com.google.zxing.integration.android.IntentIntegrator.noStringId =
                 R.string.barcode_app_install_request_reply_no;
         config = new Config(getContext().getResources());
+        locationKeeper = new LocationKeeper(applicationInstance);
     }
 
     public static Context getContext() {
@@ -221,5 +224,9 @@ public class App extends Application {
 
     public static Config getConfig() {
         return config;
+    }
+
+    public static LocationKeeper getLocationKeeper() {
+        return locationKeeper;
     }
 }

@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name="vegancheck.android.App"
@@ -29,7 +30,7 @@
             android:label="@string/app_name" />
         <meta-data
             android:name="com.crashlytics.ApiKey"
-            android:value="de80313f5f43d719218414e4cc41762af7e4e352"/>
+            android:value="de80313f5f43d719218414e4cc41762af7e4e352" />
     </application>
 
 </manifest>

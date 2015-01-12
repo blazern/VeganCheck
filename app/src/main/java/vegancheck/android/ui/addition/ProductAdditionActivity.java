@@ -2,6 +2,7 @@ package vegancheck.android.ui.addition;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -37,6 +38,8 @@ public class ProductAdditionActivity extends BarcodeHttpActionActivity {
                 ScanActivity.startBy(ProductAdditionActivity.this);
             }
         });
+
+        App.getLocationKeeper().requestLocationRenewal();
     }
 
     @Override
@@ -62,16 +65,30 @@ public class ProductAdditionActivity extends BarcodeHttpActionActivity {
             ////
 
             postParameters.add(new ParcelableNameValuePair("gmo", "0"));
-            postParameters.add(
-                    new ParcelableNameValuePair("animals", product.wasTestedOnAnimals() ? "1" : "0"));
+            postParameters.add(new ParcelableNameValuePair("animals", product.wasTestedOnAnimals() ? "1" : "0"));
             postParameters.add(new ParcelableNameValuePair("comment", ""));
 
-            postParameters.add(
-                    new ParcelableNameValuePair("user_client_app_identificator", App.getDeviceID()));
-            postParameters.add(
-                    new ParcelableNameValuePair("user_client_platform_type_index", "1"));
-            postParameters.add(
-                    new ParcelableNameValuePair("user_client_app_version", App.getAppVersion()));
+            postParameters.add(new ParcelableNameValuePair("user_client_app_identificator", App.getDeviceID()));
+            postParameters.add(new ParcelableNameValuePair("user_client_platform_type_index", "1"));
+            postParameters.add(new ParcelableNameValuePair("user_client_app_version", App.getAppVersion()));
+
+            final Location lastLocation = App.getLocationKeeper().getLastLocation();
+            if (lastLocation != null) {
+                postParameters.add(
+                        new ParcelableNameValuePair(
+                                "report_longitude",
+                                String.valueOf(lastLocation.getLongitude())));
+
+                postParameters.add(
+                        new ParcelableNameValuePair(
+                                "report_latitude",
+                                String.valueOf(lastLocation.getLatitude())));
+
+                postParameters.add(
+                        new ParcelableNameValuePair(
+                                "report_location_accuracy",
+                                String.valueOf(lastLocation.getAccuracy())));
+            }
         } else {
             App.error(this, "(actionResult instanceof Product) == false!");
         }
