@@ -14,21 +14,14 @@ import java.io.PrintWriter;
 
 public final class Config {
     private static final String CONFIG_FILE_NAME = "config.json";
-    private static final String DEFAULT_URL = "http://lumeria.ru/vscaner/";
+    private static final String DEFAULT_URL = "http://lumeria.ru/vscaner/1.11/";
+    private static final int DEFAULT_VERSION = -1;
     private JSONObject config;
 
-    public String getServerUrl() {
-        if (config != null) {
-            try {
-                return config.getString("server_url");
-            } catch (final JSONException e) {
-                App.logError(this, e.getMessage());
-                return DEFAULT_URL;
-            }
-        }
-        return DEFAULT_URL;
-    }
-
+    /**
+     * @param resources must be not null
+     * @throws IllegalArgumentException any parameter is invalid
+     */
     public Config(final Resources resources) {
         if (resources == null) {
             throw new IllegalArgumentException("can't initialize without Resources");
@@ -48,37 +41,48 @@ public final class Config {
         }
     }
 
+    /**
+     * If a config doesn't exist in the external folder, copies the assets one to it.
+     * If the config from the external folder has a version lower than the config in assets, the external
+     * one will be replaced with the assets one.
+     */
     private JSONObject getConfigFromExternalFolder(final Resources resources) throws IOException {
         if (!isExternalStorageReadable()) {
             throw new IOException("is device not ok or did the programmer make an error?");
         }
 
-        final File externalConfig =
-                getExternalConfigFile(resources.getString(R.string.app_name));
-
-        if (!externalConfig.exists()) {
-            final String assetsConfig = getAssetConfig(resources);
-            final PrintWriter printWriter = new PrintWriter(externalConfig);
-            try {
-                printWriter.print(assetsConfig);
-            } finally {
-                printWriter.close();
-            }
+        final File externalConfigFile = getExternalConfigFile(resources.getString(R.string.app_name));
+        if (!externalConfigFile.exists()) {
+            createExternalConfigFromAssets(resources, externalConfigFile);
         }
 
-        final FileInputStream fileInputStream = new FileInputStream(externalConfig);
-        final String resultAsString;
+        final FileInputStream fileInputStream = new FileInputStream(externalConfigFile);
+        final String externalConfigAsString;
         try {
-            resultAsString = convertStreamToString(fileInputStream);
+            externalConfigAsString = convertStreamToString(fileInputStream);
         } finally {
             fileInputStream.close();
         }
 
-        final JSONObject result;
+        final JSONObject externalConfig;
         try {
-            result = new JSONObject(resultAsString);
+            externalConfig = new JSONObject(externalConfigAsString);
         } catch (final JSONException e) {
-            throw new IOException("for some data read from external config file was not valid", e);
+            throw new IOException("for some reason data read from external config file was not valid", e);
+        }
+
+        final JSONObject assetsConfig = getConfigFromAssetsFolder(resources);
+        JSONObject result = assetsConfig;
+        try {
+            if (assetsConfig.getInt("config_version") > externalConfig.getInt("config_version")) {
+                result = assetsConfig;
+                createExternalConfigFromAssets(resources, externalConfigFile);
+            } else {
+                result = externalConfig;
+            }
+        } catch (final JSONException e) {
+            createExternalConfigFromAssets(resources, externalConfigFile);
+            App.error(this, "looks like something went wrong with config parsing", e);
         }
         return result;
     }
@@ -101,6 +105,16 @@ public final class Config {
         }
 
         return new File(appDir, CONFIG_FILE_NAME);
+    }
+
+    private void createExternalConfigFromAssets(final Resources resources, final File externalConfigFile) throws IOException {
+        final String assetsConfig = getAssetConfig(resources);
+        final PrintWriter printWriter = new PrintWriter(externalConfigFile);
+        try {
+            printWriter.print(assetsConfig);
+        } finally {
+            printWriter.close();
+        }
     }
 
     private String getAssetConfig(final Resources resources) throws IOException {
@@ -128,5 +142,29 @@ public final class Config {
         } catch (final JSONException e) {
             throw new IOException("the json file in assets is not valid! wtf?");
         }
+    }
+
+    public String getServerUrl() {
+        if (config != null) {
+            try {
+                return config.getString("server_url");
+            } catch (final JSONException e) {
+                App.logError(this, e.getMessage());
+                return DEFAULT_URL;
+            }
+        }
+        return DEFAULT_URL;
+    }
+
+    public int getVersion() {
+        if (config != null) {
+            try {
+                return config.getInt("config_version");
+            } catch (final JSONException e) {
+                App.logError(this, e.getMessage());
+                return DEFAULT_VERSION;
+            }
+        }
+        return DEFAULT_VERSION;
     }
 }

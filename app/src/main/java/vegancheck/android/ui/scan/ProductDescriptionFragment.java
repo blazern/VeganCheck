@@ -46,6 +46,13 @@ public class ProductDescriptionFragment extends Fragment {
         }
 
         if (product != null) {
+            final View notVerifiedYetView = root.findViewById(R.id.text_not_verified);
+            if (product.isVerified()) {
+                notVerifiedYetView.setVisibility(View.INVISIBLE);
+            } else {
+                notVerifiedYetView.setVisibility(View.VISIBLE);
+            }
+
             ((TextView) root.findViewById(R.id.text_barcode)).
                     setText(product.getBarcode());
             ((TextView) root.findViewById(R.id.text_product_name)).

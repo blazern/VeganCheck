@@ -18,6 +18,7 @@
     <string name="product_description_fragment_product_name_title">Product name:</string>
     <string name="product_description_fragment_company_title">Company name:</string>
     <string name="product_description_fragment_product_info_title">Product description</string>
+    <string name="product_description_fragment_not_verified_warning">!Not verified yet!</string>
 
     <string name="scan_activity_product_downloading_error_message">Oops, couldn\'t connect to server</string>
     <string name="scan_activity_before_scan_start_message">Move your camera to the barcode</string>

@@ -10,6 +10,7 @@ public final class Product implements Serializable {
     private final Status status;
     private final boolean wasTestedOnAnimals;
     private final boolean isFullyInitialized;
+    private final boolean isVerified;
 
     /**
      * @param barcode must be valid (BarcodeToolkit.isValid(..) == true).
@@ -25,6 +26,7 @@ public final class Product implements Serializable {
         this.status = Status.NOT_VEGETARIAN;
         this.wasTestedOnAnimals = true;
         this.isFullyInitialized = false;
+        this.isVerified = false;
     }
 
     /**
@@ -37,7 +39,8 @@ public final class Product implements Serializable {
             final String name,
             final String company,
             final Status status,
-            final boolean wasTestedOnAnimals) throws IllegalArgumentException  {
+            final boolean wasTestedOnAnimals,
+            final boolean isVerified) throws IllegalArgumentException  {
         if (!BarcodeToolkit.isValid(barcode)) {
             throw new IllegalArgumentException("barcode is not valid");
         } else if (status == null) {
@@ -51,6 +54,7 @@ public final class Product implements Serializable {
         this.status = status;
         this.wasTestedOnAnimals = wasTestedOnAnimals;
         this.isFullyInitialized = true;
+        this.isVerified = isVerified;
     }
 
     public String getBarcode() {
@@ -90,6 +94,13 @@ public final class Product implements Serializable {
      */
     public boolean isFullyInitialized() {
         return isFullyInitialized;
+    }
+
+    /**
+     * @return whether the product was verified by a moderator.
+     */
+    public boolean isVerified() {
+        return isVerified;
     }
 
     @Override

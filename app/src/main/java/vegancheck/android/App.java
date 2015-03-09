@@ -55,7 +55,11 @@ public class App extends Application {
     }
 
     public static void logError(final Object requester, final String message) {
-        final String fullMessage = getFullMessage(requester, message, null);
+        logError(requester, message, null);
+    }
+
+    public static void logError(final Object requester, final String message, final Exception e) {
+        final String fullMessage = getFullMessage(requester, message, e);
         if (isDebug) {
             Log.e(getName(), fullMessage);
         } else {
@@ -156,9 +160,13 @@ public class App extends Application {
     }
 
     public static void error(final Object requester, final String message) {
-        logError(requester, message);
+        error(requester, message, null);
+    }
+
+    public static void error(final Object requester, final String message, final Exception e) {
+        logError(requester, message, e);
         if (isDebug) {
-            throw new Error(message);
+            throw new Error(message, e);
         }
     }
 

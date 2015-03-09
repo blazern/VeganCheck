@@ -106,7 +106,7 @@ public class ProductAdditionFragment extends BarcodeHttpActionFragment<Product> 
                     ((CheckBox) root.findViewById(R.id.checkbox_was_tested_on_animals)).isChecked();
 
             try {
-                return new Product(barcode, productName, companyName, status, wasTestedOnAnimals);
+                return new Product(barcode, productName, companyName, status, wasTestedOnAnimals, false);
             } catch (final IllegalArgumentException e) {
                 App.error(
                         this,

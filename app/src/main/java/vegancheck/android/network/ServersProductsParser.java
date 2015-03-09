@@ -8,7 +8,7 @@ import vegancheck.android.Product;
 public final class ServersProductsParser {
     private static final char SEPARATOR_CHAR = '§';
     private static final String SEPARATOR_STRING = Character.toString(SEPARATOR_CHAR);
-    private static final int VALID_SEPARATORS_COUNT = 6;
+    private static final int VALID_SEPARATORS_COUNT = 7;
 
     private ServersProductsParser() {
     }
@@ -23,7 +23,7 @@ public final class ServersProductsParser {
 
         final String[] arguments = validEncodedProduct.split(SEPARATOR_STRING);
         App.assertCondition(
-                arguments.length == VALID_SEPARATORS_COUNT + 1,
+                arguments.length >= VALID_SEPARATORS_COUNT + 1,
                 "arguments.length=(" + arguments.length + "), "
                 + "VALID_SEPARATORS_COUNT=(" + VALID_SEPARATORS_COUNT + ")" );
 
@@ -35,8 +35,11 @@ public final class ServersProductsParser {
             throw new ParseException("null encodedProduct given", 0);
         }
 
-        if (getSeparatorsCountIn(encodedProduct) != VALID_SEPARATORS_COUNT) {
+        final int separatorsCount = getSeparatorsCountIn(encodedProduct);
+        if (separatorsCount < VALID_SEPARATORS_COUNT) {
             throw new ParseException("encodedProduct has invalid number of separators", 0);
+        } else if (separatorsCount > VALID_SEPARATORS_COUNT) {
+            App.logDebug(ServersProductsParser.class, "server gave a product with more field than the client can read!");
         }
 
         String validatedEncodedProduct = encodedProduct;
@@ -61,6 +64,7 @@ public final class ServersProductsParser {
         final boolean isVegetarian = arguments[2].equals("0");
         final boolean wasTestedOnAnimals = arguments[3].equals("1");
         final String company = arguments[5];
+        final boolean isVerified = arguments[7].equals("1");
 
         final Product.Status status;
         if (isVegan) {
@@ -77,7 +81,8 @@ public final class ServersProductsParser {
                     name,
                     company,
                     status,
-                    wasTestedOnAnimals);
+                    wasTestedOnAnimals,
+                    isVerified);
         } catch (final IllegalArgumentException e) {
             App.logInfo(
                     ServersProductsParser.class,
