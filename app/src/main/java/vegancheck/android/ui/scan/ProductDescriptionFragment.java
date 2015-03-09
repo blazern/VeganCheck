@@ -48,7 +48,7 @@ public class ProductDescriptionFragment extends Fragment {
         if (product != null) {
             final View notVerifiedYetView = root.findViewById(R.id.text_not_verified);
             if (product.isVerified()) {
-                notVerifiedYetView.setVisibility(View.INVISIBLE);
+                notVerifiedYetView.setVisibility(View.GONE);
             } else {
                 notVerifiedYetView.setVisibility(View.VISIBLE);
             }
