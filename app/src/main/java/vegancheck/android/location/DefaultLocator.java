@@ -32,7 +32,8 @@ final class DefaultLocator implements Locator {
         }
 
         cancelLocationRequestFor(listener);
-        locationsSenders.add(new OSLocationsSenderToLocatorListener(listener, locationManager));
+        // TODO: commented out so that the app wouldn't crash because of lack of the permission.
+//        locationsSenders.add(new OSLocationsSenderToLocatorListener(listener, locationManager));
     }
 
     @Override

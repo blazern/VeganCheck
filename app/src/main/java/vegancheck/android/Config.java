@@ -27,18 +27,20 @@ public final class Config {
             throw new IllegalArgumentException("can't initialize without Resources");
         }
 
-        try {
-            config = getConfigFromExternalFolder(resources);
-        } catch (final IOException externalConfigException) {
-            App.error("this", externalConfigException.getMessage());
-
+        // TODO: return the commented code bellow
+        // (not in the same form, there's no need in WRITE_EXTERNAL_STORAGE permission)
+//        try {
+//            config = getConfigFromExternalFolder(resources);
+//        } catch (final IOException externalConfigException) {
+//            App.error("this", externalConfigException.getMessage());
+//
             try {
                 config = getConfigFromAssetsFolder(resources);
             } catch (final IOException assetsConfigException) {
                 App.error("this", assetsConfigException.getMessage());
                 config = null;
             }
-        }
+//        }
     }
 
     /**
